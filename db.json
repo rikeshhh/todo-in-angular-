@@ -1,0 +1,6 @@
+{
+  "todos": [
+    { "id": 1, "title": "Learn Angular", "completed": false },
+    { "id": 2, "title": "Set up JSON Server", "completed": false }
+  ]
+}
