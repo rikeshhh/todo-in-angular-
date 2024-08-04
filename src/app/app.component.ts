@@ -15,6 +15,8 @@ export class AppComponent implements OnInit {
   title = 'todo-app';
   todos: any[] = [];
   newTodo = '';
+  editTodoId: number | null = null;
+  editTodoText: string = '';
 
   private apiUrl = 'http://localhost:3000/todos';
 
@@ -49,5 +51,30 @@ export class AppComponent implements OnInit {
       this.todos.push(data);
       this.newTodo = '';
     });
+  }
+
+  enableEdit(todo: any) {
+    this.editTodoId = todo.id;
+    this.editTodoText = todo.text;
+  }
+
+  saveEdit(todo: any) {
+    if (this.editTodoText.trim().length === 0) {
+      return;
+    }
+    const updatedTodo = { ...todo, text: this.editTodoText };
+    this.http
+      .put<any>(`${this.apiUrl}/${todo.id}`, updatedTodo)
+      .subscribe((data) => {
+        const index = this.todos.findIndex((t) => t.id === todo.id);
+        this.todos[index] = data;
+        this.editTodoId = null;
+        this.editTodoText = '';
+      });
+  }
+
+  cancelEdit() {
+    this.editTodoId = null;
+    this.editTodoText = '';
   }
 }
